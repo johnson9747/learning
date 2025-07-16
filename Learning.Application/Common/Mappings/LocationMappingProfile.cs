@@ -9,11 +9,17 @@ using System.Threading.Tasks;
 
 namespace Learning.Application.Common.Mappings
 {
-    public class LocationMappingProfile: IRegister
+    public class LocationMappingProfile : IRegister
     {
         public void Register(TypeAdapterConfig config)
         {
-            config.NewConfig<Location,LocationDto>();
+            config.NewConfig<Location, LocationDetailsDto>()
+                .Map(d => d.LocationId, s => s.Id)
+                .Map(d => d.Enquiries, s => s.HousingApplications ?? new List<HousingApplication>());
+            config.NewConfig<Location, LocationDto>()
+               .Map(d => d.LocationId, s => s.Id);
+
+            config.NewConfig<HousingApplication, EnquiriesDto>();
         }
     }
 }

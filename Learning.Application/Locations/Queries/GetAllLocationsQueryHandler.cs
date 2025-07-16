@@ -2,21 +2,15 @@
 using Learning.Application.DTOs;
 using Learning.Domain.Entities;
 using MapsterMapper;
-using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Learning.Application.Locations.Queries
 {
-    public class GetAllLocationsHandler : IRequestHandler<GetAllLocationsQuery, List<LocationDto>>
+    public class GetAllLocationsQueryHandler 
     {
         private readonly IRepository<Location> _locationRepository;
         private readonly IMapper _mapper;
 
-        public GetAllLocationsHandler(IRepository<Location> locationRepository,IMapper mapper)
+        public GetAllLocationsQueryHandler(IRepository<Location> locationRepository,IMapper mapper)
         {
             _locationRepository = locationRepository;
             _mapper = mapper;

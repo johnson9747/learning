@@ -6,5 +6,8 @@ using System.Threading.Tasks;
 
 namespace Learning.Application.DTOs
 {
-    public record HousingApplicationDto(int LocationId, string FirstName, string LastName, string Email);
+    public class LocationDetailsDto: LocationDto
+    {
+        public List<EnquiriesDto> Enquiries { get; set; } = new();
+    }
 }

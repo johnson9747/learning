@@ -8,7 +8,7 @@ namespace Learning.Application.DTOs
 {
     public class LocationDto
     {
-        public int Id { get; set; }
+        public int LocationId { get; set; }
         public string Name { get; set; } = default!;
         public string City { get; set; } = default!;
         public string State { get; set; } = default!;

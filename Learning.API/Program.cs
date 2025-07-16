@@ -6,16 +6,24 @@ using Microsoft.OpenApi.Models;
 using Learning.Infrastructure;
 using Learning.Application.Locations.Queries;
 using Mapster;
+using Wolverine;
+using MapsterMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Host.UseWolverine(opts =>
+{
+    opts.ApplicationAssembly = typeof(GetAllLocationsQuery).Assembly;
+});
 var googleClientId = builder.Configuration["AuthClientId"];
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddMapster();
+// Add Mapster configuration manually
 TypeAdapterConfig.GlobalSettings.Scan(typeof(LocationMappingProfile).Assembly);
+builder.Services.AddSingleton(TypeAdapterConfig.GlobalSettings);
+builder.Services.AddScoped<IMapper, ServiceMapper>();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Google Auth API", Version = "v1" });
@@ -72,7 +80,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     }
     );
 builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAllLocationsQuery).Assembly));
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>

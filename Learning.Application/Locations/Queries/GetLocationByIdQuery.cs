@@ -1,4 +1,4 @@
 ﻿namespace Learning.Application.Locations.Queries
 {
-    public record GetAllLocationsQuery();
+    public record GetLocationByIdQuery(int Id);
 }

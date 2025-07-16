@@ -1,7 +1,9 @@
 ﻿using Learning.Application.DTOs;
+using Learning.Application.HousingApplications.Commands;
 using Learning.Application.Locations.Queries;
-using MediatR;
+using Mapster;
 using Microsoft.AspNetCore.Mvc;
+using Wolverine;
 
 namespace Learning.API.Controllers
 {
@@ -9,23 +11,30 @@ namespace Learning.API.Controllers
     [ApiController]
     public class HousingController : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly IMessageBus _bus;
 
-        public HousingController(IMediator mediator)
+        public HousingController(IMessageBus bus)
         {
-            _mediator = mediator;
+            _bus = bus;
         }
         [HttpGet]
         [Route("locations")]
         public async Task<List<LocationDto>> GetLocations()
         {
-              return await _mediator.Send(new GetAllLocationsQuery());
+              return await _bus.InvokeAsync<List<LocationDto>>(new GetAllLocationsQuery());
         }
         [HttpGet]
         [Route("locations/{id}")]
-        public async Task<LocationDto> GetLocationById(int id)
+        public async Task<LocationDetailsDto> GetLocationById(int id)
         {
-            return await _mediator.Send(new GetAllLocationByIdQuery() { Id=id});
+            return await _bus.InvokeAsync<LocationDetailsDto>(new GetLocationByIdQuery(id));
+        }
+
+        [HttpPost]
+        [Route("enquiry")]
+        public async Task<bool> AddEnquiry([FromBody] HousingApplicationDto applicationDto)
+        {
+            return await _bus.InvokeAsync<bool>(applicationDto.Adapt<CreateHousingApplicationCommand>());
         }
 
     }
