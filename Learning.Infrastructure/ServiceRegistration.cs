@@ -2,6 +2,7 @@
 using Learning.Infrastructure.Identity;
 using Learning.Infrastructure.Persistence;
 using Learning.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +21,7 @@ namespace Learning.Infrastructure
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(config.GetConnectionString("DefaultConnection")));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped<IClaimsTransformation, CustomClaimsTransformer>();
             return services;
         }
     }

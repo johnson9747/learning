@@ -21,6 +21,10 @@ namespace Learning.Application.Common.Interfaces
             Expression<Func<T, bool>> predicate,
             Func<IQueryable<T>, IQueryable<T>> include,
             CancellationToken cancellationToken = default);
+        Task<T?> GetSingleWithIncludeAsync(
+   Expression<Func<T, bool>> predicate,
+   Func<IQueryable<T>, IQueryable<T>> include,
+   CancellationToken cancellationToken = default);
         Task AddAsync(T entity, CancellationToken cancellationToken = default);
         T Update(T entity);
         void Delete(T entity);

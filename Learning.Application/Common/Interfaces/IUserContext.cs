@@ -11,5 +11,6 @@ namespace Learning.Application.Common.Interfaces
         string FirstName { get; }
         string LastName { get; }
         string Email { get; }
+        List<string> Roles { get; }
     }
 }

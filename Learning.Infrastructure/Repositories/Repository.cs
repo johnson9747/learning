@@ -57,7 +57,14 @@ namespace Learning.Infrastructure.Repositories
         }
 
         public void Delete(T entity) => _dbSet.Remove(entity);
-
+        public async Task<T?> GetSingleWithIncludeAsync(
+    Expression<Func<T, bool>> predicate,
+    Func<IQueryable<T>, IQueryable<T>> include,
+    CancellationToken cancellationToken = default)
+        {
+            var query = include(_dbSet.AsQueryable());
+            return await query.FirstOrDefaultAsync(predicate, cancellationToken);
+        }
         public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
             => await _context.SaveChangesAsync(cancellationToken);
     }
