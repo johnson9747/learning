@@ -22,13 +22,15 @@ namespace Learning.Application.Locations.Queries
         public async Task<LocationDetailsDto> Handle(GetLocationByIdQuery request, CancellationToken cancellationToken)
         {
 
-            var result = await _locationRepository.GetSingleWithIncludeAsync(x=>x.Id==request.Id, include: q => q.Include(x => x.HousingApplications), cancellationToken);
-            if (!_userContext.Roles.Contains("Admin"))
-            {
-                result.HousingApplications = result.HousingApplications
-                    .Where(h => h.Email == _userContext.Email)
-                    .ToList();
-            }
+            Func<IQueryable<Location>, IQueryable<Location>> include = q =>
+    q.Include(x => x.HousingApplications
+        .Where(h => _userContext.Roles.Contains("Admin") || h.Email == _userContext.Email));
+
+            var result = await _locationRepository.GetSingleWithIncludeAsync(
+                predicate: x => x.Id == request.Id,
+                include: include,
+                cancellationToken: cancellationToken
+            );
             return _mapper.Map<LocationDetailsDto>(result);
         }
     }
