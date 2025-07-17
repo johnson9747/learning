@@ -19,5 +19,6 @@ namespace Learning.Domain.Entities
         public string FirstName { get; set; } = default!;
         public string LastName { get; set; } = default!;
         public string Email { get; set; } = default!;
+        public string Details { get; set; } = default!;
     }
 }

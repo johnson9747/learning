@@ -8,6 +8,8 @@ using Learning.Application.Locations.Queries;
 using Mapster;
 using Wolverine;
 using MapsterMapper;
+using Learning.Application.Common.Interfaces;
+using Learning.Infrastructure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,6 +82,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     }
     );
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUserContext, UserContext>();
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>

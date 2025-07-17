@@ -2,6 +2,7 @@
 using Learning.Application.HousingApplications.Commands;
 using Learning.Application.Locations.Queries;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Wolverine;
 
@@ -29,12 +30,13 @@ namespace Learning.API.Controllers
         {
             return await _bus.InvokeAsync<LocationDetailsDto>(new GetLocationByIdQuery(id));
         }
-
+        [Authorize]
         [HttpPost]
         [Route("enquiry")]
         public async Task<bool> AddEnquiry([FromBody] HousingApplicationDto applicationDto)
         {
-            return await _bus.InvokeAsync<bool>(applicationDto.Adapt<CreateHousingApplicationCommand>());
+            var command = applicationDto.Adapt<CreateHousingApplicationCommand>();
+            return await _bus.InvokeAsync<bool>(command);
         }
 
     }

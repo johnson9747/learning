@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Learning.Application.DTOs
+﻿namespace Learning.Application.DTOs
 {
-    public record HousingApplicationDto(int LocationId, string FirstName, string LastName, string Email);
+    public record HousingApplicationDto(int LocationId, string MobileNo,string Details);
 }
