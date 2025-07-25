@@ -29,6 +29,14 @@ builder.Services.AddScoped<IMapper, ServiceMapper>();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Google Auth API", Version = "v1" });
+    //add an option to pass jwt token in swagger
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please enter a valid token",
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
     // Add OAuth2 flow using OpenID Connect (for ID token)
     c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
@@ -49,7 +57,21 @@ builder.Services.AddSwaggerGen(c =>
         },
         Description = "Google OAuth2 Login"
     });
-
+    //add security requirement for Bearer token
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Id = "Bearer",
+                    Type = ReferenceType.SecurityScheme
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
